@@ -1,2 +1,4 @@
 datas/
 email-ml/
+email_ml/
+.env

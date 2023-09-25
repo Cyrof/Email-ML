@@ -23,6 +23,10 @@ def tts(df):
     return [x_train, x_test, y_train, y_test]
 
 def feature_extraction(split_val):
+    """ function to do feature extraction
+    :param split_val: list of x & y train/test
+    :return split_val: return updated list of x & y train/test
+    """
     cv = CountVectorizer(
         ngram_range=(1, 3),
         stop_words="english",
@@ -37,10 +41,21 @@ def feature_extraction(split_val):
     return split_val
 
 def save_model(model):
+    """ function to save model into pickle file 
+    :param model:  machine learning model
+    :return: 
+    """
     joblib.dump(model, 'model_tc.pkl')
     print("Model saved")
 
 def create_model(scores, models, train_test):
+    """ function to create machine learning model based on highest accurary score
+    :param scores: dictionary of models with their acc scores
+    :param models: list of tuple containing model name and model instance
+    :param train_test: list of x&y train/test
+    :return:
+    """
+
     highest_key = max(scores, key=scores.get)
     models = dict(models)
     model = models[highest_key].fit(train_test[0], train_test[2])
@@ -52,6 +67,11 @@ def create_model(scores, models, train_test):
 
 
 def compare_model_acc(models, train_test):
+    """ function to get all model accuracy
+    :param models: list of tuples containing model name and model instance
+    :param train_test: list of x&y train/test
+    :return:
+    """
     score = {}
     for name, model in models:
         print(name)

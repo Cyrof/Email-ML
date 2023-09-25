@@ -26,8 +26,8 @@ def remove_null(df):
     )
     return df
 
-def save_to_file(df, path):
-    df.to_csv(path)
+def save_to_file(df, path, index=True):
+    df.to_csv(path, index=index)
     print("data saved")
 
 def process_body(df):
