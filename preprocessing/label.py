@@ -2,6 +2,10 @@ from clean_csv import *
 import pandas as pd
 
 def count_word(text_list):
+    """ function to count the amount of word appearance
+    :param text_list: list of text
+    :return count: return text appearance count
+    """
     count = dict()
 
     for s in text_list:
@@ -13,6 +17,11 @@ def count_word(text_list):
     return count
 
 def check_kw_count(kw, word_count):
+    """ function to check word in keyword and total count of word appearance
+    :param kw: dict of keywords
+    :param word_count: count of all word appearance
+    :return kw_count: return words from keyword ans total count of appearance
+    """
     kw_count = {key: 0 for key in kw}
 
     for key in word_count:
@@ -24,6 +33,10 @@ def check_kw_count(kw, word_count):
     return kw_count
 
 def label(kw_count):
+    """ function to label text
+    :param kw_count: dict of keyword with total appearance count
+    :return label: return the label of the text based on appearance count
+    """
     if all(value==0 for value in kw_count.values()):
         return "miscellaneous"
     else:
@@ -33,6 +46,11 @@ def label(kw_count):
 
 
 def filter_label(keywords, df):
+    """ funtion to label each text in df
+    :param keyword: dict of keywords to label text
+    :param df: dataframe of process data
+    :return df: return labeled df
+    """
     # label_sender(keywords, df["Sender"].iloc[5908])
     # print(df.head())
     # text = f"{df['Sender'].iloc[5908]} {df['Subject'].iloc[5908]} {df['Body'].iloc[5908]}"
@@ -52,6 +70,10 @@ def filter_label(keywords, df):
     return df
 
 def new_df(df):
+    """ function to create new dataframe
+    :param df: dataframe
+    :return n_df: return new dataframe
+    """
     n_df = pd.DataFrame(columns=["text", "label"])
 
     for ind in df.index:

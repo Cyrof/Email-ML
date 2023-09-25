@@ -1,4 +1,4 @@
-import dotenv, imaplib, email, os
+import dotenv, imaplib, email, os, html2text
 import pandas as pd
 from email import utils
 from datetime import date
@@ -61,19 +61,38 @@ def get_body(msg):
     content = []
 
     for part in msg.walk():
-        if part.get_content_type() == "text/plain":
-            content.append(part.as_string())
+        if part.get_content_type() in ["text/plain", "text/html"]:
+            try:
+                content_type = part.get_content_type()
+                if content_type == "text/plain":
+                    content.append(part.get_payload(decode=True).decode('utf-8'))
+                elif content_type == "text/html":
+                    # Convert HTML to plain text using html2text
+                    html_content = part.get_payload(decode=True).decode('utf-8')
+                    text_content = html2text.html2text(html_content)
+                    content.append(text_content)
+            except UnicodeDecodeError:
+                # Handle decoding errors, e.g., by skipping the problematic part
+                pass
+    
 
     return content
 
 
 def get_emails(n, email_list, imap):
-    tdy_date = date.today()
+    """ function to get email based on the current date
+    :param n: number of emails 
+    :param email_list: list of emails
+    :param imap: imap instance obj
+    :return email_df: return dataframe of email of current date
+    """
+    # tdy_date = date.today() # for production
+    tdy_date = date(2023, 9, 25) # custom date for dev
     counter = 0
 
     n = len(email_list) - int(n)
 
-    email_df = pd.DataFrame(columns=["sender", "subject", "body"])
+    email_df = pd.DataFrame(columns=["Sender", "Subject", "Body"])
 
     try:
         for i in range(n, len(email_list)):
@@ -82,14 +101,14 @@ def get_emails(n, email_list, imap):
             msg = email.message_from_bytes(data[0][1])
             e_date = msg.get("date")
             e_date = utils.parsedate_to_datetime(e_date).date()
-
+            
             if e_date == tdy_date:
                 counter += 1
                 sender = msg.get("From")
                 subject = msg.get("subject")
                 body = get_body(msg)
                 temp_df = pd.DataFrame(
-                    {"sender": [sender], "subject": [subject], "body": [body]}
+                    {"Sender": [sender], "Subject": [subject], "Body": [body]}
                 )
                 email_df = pd.concat([email_df, temp_df])
 
@@ -99,7 +118,15 @@ def get_emails(n, email_list, imap):
         print(f"An error occured\n{e}")
         return email_df
 
+def remove_list(df):
+    # print(f"Sender : {df['Sender'].iloc[0]}\nSubject : {df['Subject'].iloc[0]}\nBody : {df['Body'].iloc[0]}")
+    # print(df["Body"].iloc[0][0])
+    for i in range(len(df)):
+        bod = df.iloc[i]["Body"]
+        bod = " ".join(bod)
 
+        df.iloc[i]["Body"] = bod
+    return df
 
 
 if __name__ == "__main__":

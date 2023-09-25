@@ -30,7 +30,7 @@ def save_to_file(df, path, index=True):
     df.to_csv(path, index=index)
     print("data saved")
 
-def process_body(df):
+def process_body(df, type=str):
     """ function to process dataframe body data
     :param df: dataframe
     :return df: return processed df
@@ -42,6 +42,7 @@ def process_body(df):
     # pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     # bod = re.sub(pattern, '', bod)
     # print(bod)
+    
     for ind in df.index:
         bod = df["Body"][ind].split("\n\n")
         bod = " ".join([elem.replace("\n", '') for elem in bod])
