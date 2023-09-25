@@ -98,6 +98,9 @@ def process_sender(df):
     return df
 
 if __name__ == "__main__":
+    # this file contains function that is required in the main.py file for the whole program to run 
+
+    
     og_df = to_df("./datas/emails.csv") # og df
     rm_na_df = remove_null(og_df) # remove null val from df
     p_b_df = process_body(rm_na_df) # process body from df

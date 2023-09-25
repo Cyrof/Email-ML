@@ -65,6 +65,8 @@ def new_df(df):
     return n_df
 
 if __name__ == "__main__":
+    # functions in this file is not required in the main.py file 
+    
     """ 
     reservation 
     leisure -- youtube, spotify 

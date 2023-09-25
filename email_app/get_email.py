@@ -103,6 +103,8 @@ def get_emails(n, email_list, imap):
 
 
 if __name__ == "__main__":
+    # function in this file is required in the main.py file 
+    
     cred = get_cred()
     imap = init_imap(cred)
     emails = get_all_email(imap)

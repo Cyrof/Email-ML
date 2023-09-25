@@ -85,6 +85,8 @@ def compare_model_acc(models, train_test):
 
 
 if __name__ == "__main__":
+    # functions in this file is not required in the main.py file 
+    
     models = [
         ('LR', LogisticRegression(solver='liblinear')),
         ('NB', MultinomialNB()),

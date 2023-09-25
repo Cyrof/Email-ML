@@ -25,6 +25,8 @@ def lemmatize_r_stopword(df):
 
 
 if __name__ == "__main__":
+    # this file contains important function that is required in the main.py file for the program to run 
+    
     df = to_df("./datas/labeled-data.csv", index=True)
     l_sw_df = lemmatize_r_stopword(df)
     save_to_file(l_sw_df, "./datas/latest-data.csv")
