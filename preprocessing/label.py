@@ -76,12 +76,12 @@ def new_df(df):
     """
     n_df = pd.DataFrame(columns=["text", "label"])
 
-    for ind in df.index:
-        text = f"{df['Sender'][ind]} {df['Subject'][ind]} {df['Body'][ind]}"
+    for i in range(len(df)):
+        text = f"{df.iloc[i]['Sender']} {df.iloc[i]['Subject']} {df.iloc[i]['Body']}"
         temp_df = pd.DataFrame({
             'text': text,
-            'label': df['Label'][ind]
-        }, index=[ind])
+            'label': df.iloc[i]['Label']
+        }, index=[i])
         n_df = pd.concat([n_df, temp_df])
     
     return n_df

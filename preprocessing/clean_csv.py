@@ -30,7 +30,7 @@ def save_to_file(df, path, index=True):
     df.to_csv(path, index=index)
     print("data saved")
 
-def process_body(df, type=str):
+def process_body(df):
     """ function to process dataframe body data
     :param df: dataframe
     :return df: return processed df
@@ -43,14 +43,15 @@ def process_body(df, type=str):
     # bod = re.sub(pattern, '', bod)
     # print(bod)
     
-    for ind in df.index:
-        bod = df["Body"][ind].split("\n\n")
+    for i in range(len(df)):
+        bod = df.iloc[i]["Body"].split("\n\n")
         bod = " ".join([elem.replace("\n", '') for elem in bod])
         pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
         bod = re.sub(pattern, '', bod)
         bod = " ".join(elem.lower() for elem in bod.split())
+        print(bod)
 
-        df["Body"][ind] = bod
+        df.iloc[i]["Body"] = bod
     
     return df
 
@@ -60,8 +61,8 @@ def process_sub(df):
     # sub = email.header.decode_header(sub)[0][0]
     # print(sub)
 
-    for ind in df.index:
-        sub = df["Subject"][ind]
+    for i in range(len(df)):
+        sub = df.iloc[i]["Subject"]
         sub = email.header.decode_header(sub)[0][0]
         if type(sub) == bytes:
             sub = sub.decode('utf-8', errors='ignore')
@@ -70,7 +71,7 @@ def process_sub(df):
         
         # sub = " ".join(w.lower() for w in sub.split() if not any(x.isdigit() for x in w))
 
-        df["Subject"][ind] = sub
+        df.iloc[i]["Subject"] = sub
     
     return df
 
@@ -78,8 +79,9 @@ def process_sender(df):
     # sender = df["Sender"].iloc[0]
     # sender = re.sub(r'[<>"\']', '', sender)
     # print(sender)
-    for ind in df.index:
-        sender = df["Sender"][ind].split()
+    for i in range(len(df)):
+        sender = df.iloc[i]["Sender"]
+        sender = sender.split()
         try:
             sender[0] = email.header.decode_header(sender[0])[0][0]
             if type(sender[0]) == bytes:
@@ -94,7 +96,7 @@ def process_sender(df):
         #     sender = sender.decode('utf-8', errors='ignore')
         
 
-        df["Sender"][ind] = sender
+        df.iloc[i]["Sender"] = sender
     
     return df
 
@@ -102,7 +104,7 @@ if __name__ == "__main__":
     # this file contains function that is required in the main.py file for the whole program to run 
 
     
-    og_df = to_df("./datas/emails.csv") # og df
+    og_df = to_df("./datas/emails.csv", index=False) # og df
     rm_na_df = remove_null(og_df) # remove null val from df
     p_b_df = process_body(rm_na_df) # process body from df
     p_sub_df = process_sub(p_b_df) # process subject from df

@@ -22,6 +22,10 @@ def tts(df):
 
     return [x_train, x_test, y_train, y_test]
 
+def save_cv(obj):
+    joblib.dump(obj, 'cv.pkl')
+    print("feature saved")
+
 def feature_extraction(split_val):
     """ function to do feature extraction
     :param split_val: list of x & y train/test
@@ -37,6 +41,7 @@ def feature_extraction(split_val):
 
     split_val[0] = x_train_cv
     split_val[1] = x_test_cv
+    save_cv(cv)
 
     return split_val
 

@@ -1,4 +1,5 @@
 from preprocessing import clean_csv
+import re
 import nltk
 nltk_downloaded = False
 
@@ -17,7 +18,7 @@ def lemmatize_r_stopword(df):
     corpus = []
 
     for i in range(len(text)):
-        r = re.sub(r'[/=#:;"()-+\']', ' ', text[i])
+        r = re.sub(r'[/=#:;"()-+[!]\']', ' ', text[i])
         r = r.split()
         r = [word for word in r if word not in stopwords.words('english')]
         r = " ".join([lemmatizer.lemmatize(word) for word in r])

@@ -79,7 +79,7 @@ def get_body(msg):
     return content
 
 
-def get_emails(n, email_list, imap):
+def get_emails(n, email_list, imap, date_dev=None):
     """ function to get email based on the current date
     :param n: number of emails 
     :param email_list: list of emails
@@ -87,7 +87,11 @@ def get_emails(n, email_list, imap):
     :return email_df: return dataframe of email of current date
     """
     # tdy_date = date.today() # for production
-    tdy_date = date(2023, 9, 25) # custom date for dev
+    # tdy_date = date(2023, 9, 25) # custom date for dev
+    if date_dev:
+        tdy_date = date(*date_dev)
+    else:
+        tdy_date = date.today()
     counter = 0
 
     n = len(email_list) - int(n)
@@ -119,6 +123,10 @@ def get_emails(n, email_list, imap):
         return email_df
 
 def remove_list(df):
+    """ function to format elem in df to remove lists
+    :param df: dataframe to process
+    :return df: return processed df
+    """
     # print(f"Sender : {df['Sender'].iloc[0]}\nSubject : {df['Subject'].iloc[0]}\nBody : {df['Body'].iloc[0]}")
     # print(df["Body"].iloc[0][0])
     for i in range(len(df)):
